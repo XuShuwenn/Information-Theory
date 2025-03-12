@@ -1,0 +1,122 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{ctex}  % 加载 ctex 宏包
+\usepackage{amsmath}  % 引入 amsmath 宏包
+\title{Information Theory Note-1}
+\author{Xu Shuwen}
+\date{March 7 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Chapter 1 Introduction and Preview}
+
+The entropy of a random variable \(X\) with a probability mass function \(p(x)\) is defined by\[H(X)=-\sum_{x}p(x)log_2p(x).\]
+
+We use logarithms to base 2.The entropy will then be measured in bits.
+We can define conditional entropy$H(X|Y)$,which is the entropy of a random variable conditional on the knowledge of another random variable.
+
+Mutual information\[I(X;Y)=H(X)-H(X|Y)=\sum_{x,y}p(x,y)log\frac{p(x,y)}{p(x)p(y)}\]
+
+A communication channel is a system in which the output depends probabilistically on its input. For a communication channel with input $X$ and output $Y$, we can define the capacity $C$ by\[C=\max_{p(x)}I(X;Y).\]
+
+Mutual information turns out to be a special case of a more general quantity called\emph{relative entropy} $D(p||q)$, which is a measure of the "distance" between two probability mass functions $p$ and $q$. It is defined as\[D(p||q)=\sum_xp(x)log\frac{p(x)}{q(x)}\]
+
+\section{Chapter 2 Entropy, Relative Entropy, and Mutual Information}
+\subsection{熵}
+
+一个离散型随机变量$X$的熵$H(X)$定义为\[H(X)=-\sum_{x\in A}p(x)logp(x)\]有时也记作$H(p)$，其中对数log底是2，单位用比特表示
+
+如果$X\sim p(x)$,则随机变量$g(X)$的期望值可记为\[E_pg(x)=\sum_{x\in A}g(x)p(x)\]
+
+注：X的熵又解释为随机变量$log\frac{1}{p(X)}$的期望值，其中$p(x)$是$X$的概率密度函数，故\[H(X)=E_plog\frac{1}{p(x)}\]
+
+引理2.1.1 $H(X)\geq0$.
+
+引理2.1.2$H_b(X)=(log_ba)H_a(X)$.
+
+Pf.由$log_bp=(log_ba)log_ap$即得.
+
+\subsection{联合熵与条件熵}
+对于服从联合分布为$p(x,y)$的一对离散型随机变量(X,Y),其联合熵$H(X,Y)$(joint entropy)定义为\[H(X,Y)=-\sum_{x \in A}\sum_{y \in B}p(x,y)logp(x,y)\]上式亦可表示为\[H(X,Y)=-Elog_p(X,Y)\]
+条件熵：
+若$(X,Y)\sim p(x,y)$,条件熵(conditioanl entropy)$H(X,Y)$定义为
+\begin{align}
+    H(Y|X)&=\sum_{x \in X}p(x)H(Y|X=x)\\
+      &=-\sum_{x \in A}p(x)\sum_{y \in B}p(y|x)logp(y|x) \\
+      &=-\sum_{x \in A}\sum_{y \in B}p(x,y)logp(y|x) \\
+      &= -Elogp(Y|X)
+\end{align}
+
+Theorem 2.2.1 (Chain rule)\[H(X,Y)=H(X)+H(X,Y)\]
+Pf:
+\begin{align}
+    H(X,Y)&=-\sum_{x \in A}\sum_{y \in B}p(x,y)logp(x,y)\\
+          &=-\sum_{x \in A}\sum_{y \in B}p(x,y)logp(x)p(y|x)\\
+          &=-\sum_{x \in A}\sum_{y \in B}p(x,y)logp(x)-\sum_{x \in A}\sum_{y\in B}p(x,y)logp(y|x)\\
+          &=-\sum_{x\in A}p(x)logp(x)-\sum_{x\in A}\sum_{y\in B}p(x,y)logp(y|x)\\
+          &=H(X)+H(Y|X)
+\end{align}
+推论：\[H(X,Y|Z)=H(X|Z)+H(Y|X,Z)\]
+注：注意$H(Y|X)\neq H(X|Y)$,但$H(X)-H(X|Y)=H(Y)-H(Y|X)$.
+
+\subsection{相对熵与互信息}
+
+相对熵(relative entropy)是两个随机分布之间的距离度量，对应统计学中的似然比的对数期望
+
+定义：两个概率密度函数为$p(x)$和$q(x)$之间的相对熵或$Kullback-Leibler$距离定义为
+\begin{align}
+    D(p||q)&=\sum_{x\in X}p(x)log\frac{p(x)}{q(x)}\\
+           &=E_plog\frac{p(X)}{q(X)}
+\end{align} 
+互信息（mutual information），它是一个随机变量包含另一个随机变量信息量的度量。互信息也是在给定另一随机变量的条件下，原随机变量不确定度的缩减量。
+
+定义：考虑两个随机变量$X$和$Y$，联合概率密度函数为$p(x,y)$，其边缘概率密度函数分别为$p(x)$和$p(y)$,互信息$I(X;Y)$为联合分布$p(x,y)$和乘积分布之间的相对熵，即：
+\begin{align}
+    I(X;Y)&=\sum_{x\in X}\sum_{y\in Y}p(x,y)log\frac{p(x,y)}{p(x)p(y)}\\
+          &=D(p(x,y)||p(x)p(y))\\
+          &=E_{p(x,y)}log\frac{p(X,Y)}{p(X)p(Y)}
+\end{align}
+\subsection{相对熵和互信息之间的关系}
+
+将互信息$I(X;Y)$重新写为：
+\begin{align}
+    I(X;Y)&=\sum_{x,y}p(x,y)log\frac{p(x,y)}{p(x)p(y)}\\
+          &=\sum_{x,y}p(x,y)log\frac{p(x|y)}{p(x)}\\
+          &=-\sum_{x,y}p(x,y)logp(x)+\sum_{x,y}p(x,y)logp(x|y)\\
+          &=-\sum_{x}p(x)logp(x)-(-\sum_{x,y}p(x,y)log(x|y))\\
+          &=H(X)-H(X|Y)
+\end{align}
+由此，互信息$I(X;Y)$是在给定Y的条件下X的不确定度的缩减量。
+
+对称地，也可得到\[I(X;Y)=H(Y)-H(Y|X)\].
+
+最后，注意到\[I(X;X)=H(X)-H(X|X)=H(X)\]
+
+因此，随机变量与自身的互信息为该随机变量的熵，有时也称熵为自信息(self-information)。
+\subsection{熵，相对熵与互信息的链式法则}
+Theorem 2.5.1（熵的链式法则）
+设随机变量$X_1,X_2,...,X_n$服从$p(x_1,x_2,...,x_n)$,则\[H(X_1,X_2,...,X_n)=\sum_{i=1}^{n}H(X_i|X_{i-1},...,X_1)\]
+定义条件互信息(conditional mutual information)：
+\begin{align}
+    I(X;Y|Z)&=H(X|Z)-H(X|Y,Z)\\
+            &=E_{p(x,y,z)}log\frac{p(X,Y|Z)}{p(X|Z)p(Y|Z)}
+\end{align}
+互信息也满足链式法则
+
+Theorem 2.5.2 (互信息的链式法则)\[I(X_1,X_2,...,X_n;Y)=\sum_{i=1}^{n}I(X_i;Y|X_{i-1},X_{i-2},...,X_1)\]
+
+下定义相对熵的条件形式：
+
+对于联合密度函数$p(x,y)$和$q(x,y)$,条件相对熵(conditional relative entropy)$D(p(y|x)||q(y|x))$定义为条件概率密度函数$p(y|x)$和$q(y|x)$之间的平均相对熵，其中取平均是相对概率密度函数而言的
+\begin{align}
+    D(p(y|x)||q(y|x))&=\sum_{x}p(x)\sum_{y}p(y|x)log\frac{p(y|x)}{q(y|x)}\\
+                     &=E_{p(x,y)}log\frac{p(Y|X)}{q(Y|X)}
+\end{align}
+Theorem 2.5.3(相对熵的链式法则)\[D(p(x,y)||q(x,y))=D(p(x)||q(x))+D(p(y|x)||q(y|x))\]
+\subsection{Jesen不等式及其结果}
+定义：若对于任意的$x_1,x_2 \in (a,b),0\leq \lambda \leq 1$,满足：\[f(\lambda x_1+(1-\lambda)x_2)\leq \lambda f(x_1)+(1-\lambda)f(x_2)\]则称函数$f(x)$在区间$(a,b)$上是凸(convex)的.如果当且仅当$\lambda =0$或$\lambda =1$时上式成立，则称$f$是严格凸的.
+Theorem 2.6.2(Jesen 不等式)若给定凸函数$f$和一个随机变量$X$,则\[Ef(X)\geq f(EX)\]进一步地，若$f$是严格凸的，那么等式蕴含$X=EX$的概率为1.
+
+\end{document}
